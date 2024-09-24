@@ -1,12 +1,17 @@
+# Utilisation de l'image de base
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
-# Utiliser une image officielle FastAPI basée sur Python 3.8
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim
+# Répertoire de travail dans le conteneur
+WORKDIR /app
 
-# Copier le contenu du répertoire courant dans le conteneur
-COPY ./ /app
+# Copie des fichiers nécessaires
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Exposer le port 80 pour les connexions externes
-EXPOSE 80
+COPY ./app /app
 
-# Démarrer le serveur FastAPI avec Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+# Commande pour démarrer l'application
+CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "80"]
+
+
+
